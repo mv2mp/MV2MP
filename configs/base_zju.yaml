@@ -1,0 +1,14 @@
+hydra:
+    run:
+        dir: "../outputs/${exp}/${run}"
+
+defaults:
+  - model: model_w_bg
+  - dataset: video_zju
+  - trainer: base
+  - _self_
+
+seed: 42
+project_name: "model_w_bg"
+exp: ${dataset.train.type}
+run: ${dataset.metainfo.subject}
