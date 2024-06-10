@@ -1,0 +1,164 @@
+defaults:
+  - trainer: base
+model:
+  wo_merge: false
+  agg_func: sum
+  learning_rate: 0.0005
+  sched_milestones:
+  - 7
+  - 17
+  sched_factor: 0.5
+  smpl_init: true
+  is_continue: true
+  use_body_parsing: false
+  with_bkgd: true
+  using_inpainting: false
+  use_smpl_deformer: true
+  use_bbox_sampler: false
+  sdf_bounding_sphere_radius: 3
+  persons_count: 2
+  implicit_network:
+    feature_vector_size: 256
+    d_in: 3
+    d_out: 1
+    dims:
+    - 256
+    - 256
+    - 256
+    - 256
+    - 256
+    - 256
+    - 256
+    - 256
+    init: geometry
+    bias: 0.6
+    skip_in:
+    - 4
+    weight_norm: true
+    embedder_mode: fourier
+    multires: 6
+    cond: smpl
+    scene_bounding_sphere: 4.0
+  rendering_network:
+    feature_vector_size: 256
+    mode: pose
+    d_in: 14
+    d_out: 3
+    dims:
+    - 256
+    - 256
+    - 256
+    - 256
+    weight_norm: true
+    multires_view: -1
+  bg_implicit_network:
+    feature_vector_size: 256
+    d_in: 4
+    d_out: 1
+    dims:
+    - 256
+    - 256
+    - 256
+    - 256
+    - 256
+    - 256
+    - 256
+    - 256
+    init: none
+    bias: 0.0
+    skip_in:
+    - 4
+    weight_norm: false
+    embedder_mode: fourier
+    multires: 10
+    cond: frame
+    dim_frame_encoding: 32
+  bg_rendering_network:
+    feature_vector_size: 256
+    mode: nerf_frame_encoding
+    d_in: 3
+    d_out: 3
+    dims:
+    - 128
+    weight_norm: false
+    multires_view: 4
+    dim_frame_encoding: 32
+  shadow_network:
+    d_in: 3
+    d_out: 1
+    dims:
+    - 128
+    - 128
+    weight_norm: false
+  density:
+    params_init:
+      beta: 0.1
+    beta_min: 0.0001
+  ray_sampler:
+    near: 0.0
+    N_samples: 64
+    N_samples_eval: 128
+    N_samples_extra: 32
+    eps: 0.1
+    beta_iters: 10
+    max_total_iters: 5
+    N_samples_inverse_sphere: 32
+    add_tiny: 1.0e-06
+  loss:
+    eikonal_weight: 0.1
+    bce_weight: 0.005
+    opacity_sparse_weight: 0.1
+    in_shape_weight: 0.1
+    sdf_loss_weight: 0.01
+    dynamic_weight: False
+
+dataset:
+  base_ff_config: &base_ff_config
+    _target: reconstruction.neuralbody.datasets.factory.CachedFFGenerator
+    ff_path: //home/vr/dev/user/frame_folders/hi4d/pair21_hug21
+    frames: ${range:40,60}
+    generator_caching: true
+    save_locally: true
+    individulally_iterated_instances: [0,1]
+    per_instance_colors: [300, 360]
+    permute_cameras: false
+    permute_frames: none
+    resize_ratio: 1.0
+    object_source: smpl_hi4d
+  metainfo:
+    gender: male
+    frames_count: ${len:${..base_ff_config.frames}}
+    subject: ${..base_ff_config.ff_path}
+  train:
+    type: FFCache
+    batch_size: 1
+    drop_last: false
+    shuffle: true
+    worker: 0
+    num_sample: 2048
+    pixel_per_batch: 2048
+    correct_translations: true
+    chosen_frame_ids: ${..base_ff_config.frames}
+    ff_config:
+      <<: *base_ff_config
+      cameras: [lower_0, lower_1, lower_2, lower_3, lower_4, lower_5, lower_6, lower_7, upper_1_0, upper_1_1, upper_1_2, upper_1_3, upper_1_4, upper_1_5, upper_1_6, upper_1_7]
+
+  valid:
+    - type: FFCache
+      batch_size: 1
+      drop_last: false
+      shuffle: false
+      worker: 0
+      num_sample: -1
+      pixel_per_batch: 2048
+      correct_translations: true
+      chosen_frame_ids: [41, 45, 55]
+      ff_config:
+        <<: *base_ff_config
+        resize_ratio: 0.125
+        cameras: [val_0, val_1, val_2, val_3, val_4, val_5]
+
+seed: 42
+project_name: model_w_bg
+exp: looks-like-it-works-3
+run: ${dataset.metainfo.subject}

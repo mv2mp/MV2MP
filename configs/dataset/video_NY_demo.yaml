@@ -1,0 +1,42 @@
+metainfo:
+    gender: 'male'
+    data_dir : /home/flynn/vr_docker_shared_common/datasets
+    subject: 250_frames_new_year_demo.pkl
+    frames_count: 249
+    banned_cameras_dataset_cameras: ['CAM_02','CAM_03', 'CAM_06', 'CAM_07', 'CAM_08', 'CAM_12', 'CAM_13', 'CAM_14', 'CAM_16', 'CAM_17']   # ['CAM_8','CAM_7']
+    frames_ids_ranges_to_train: 
+        - - 52500
+          - 53500
+
+train:
+    type: "VideoZju"
+    batch_size: 1
+    drop_last: False
+    shuffle: True
+    worker: 0
+    num_sample : 2048
+    cache: False
+
+valid:
+    - type: "VideoZjuVal"
+      image_id: 0
+      batch_size: 1
+      drop_last: False
+      shuffle: False
+      worker: 0
+      num_sample : -1
+      pixel_per_batch: 2048
+      cameras: [0,]
+      cache: False
+
+test:
+    - type: "VideoZjuTest"
+      image_id: 0
+      batch_size: 1
+      drop_last: False
+      shuffle: False
+      worker: 0
+      num_sample : -1
+      pixel_per_batch: 2048
+      cameras: [0]
+      cache: False

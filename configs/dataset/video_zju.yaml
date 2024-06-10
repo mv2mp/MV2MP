@@ -1,0 +1,42 @@
+metainfo:
+    gender: 'neutral'
+    data_dir : /home/flynn/vr_docker_shared_common/datasets/zjumocap
+    subject: CoreView_392
+    start_frame: 0
+    end_frame: 299
+    body_params_loader: zju
+    chromo: True
+
+train:
+    type: "VideoZju"
+    batch_size: 1
+    drop_last: False
+    shuffle: False
+    worker: 0
+    num_sample : 512
+    cameras: [0, 6, 12, 18]
+    cache: True
+
+valid:
+    - type: "VideoZjuVal"
+      image_id: 0
+      batch_size: 1
+      drop_last: False
+      shuffle: False
+      worker: 0
+      num_sample : -1
+      pixel_per_batch: 2048
+      cameras: [3,]
+      cache: False
+
+test:
+    - type: "VideoZjuTest"
+      image_id: 0
+      batch_size: 1
+      drop_last: False
+      shuffle: False
+      worker: 8
+      num_sample : -1
+      pixel_per_batch: 2048
+      cameras: [1,]
+      cache: False

@@ -1,0 +1,14 @@
+hydra:
+    run:
+        dir: "outputs/${exp}/${run}"
+
+defaults:
+  - model: model_w_bg_decrease_lr_earlier
+  - dataset: video_NY_demo
+  - trainer: base
+  - _self_
+
+seed: 42
+project_name: "ny_demo"
+exp: 'ny_demo_exp'
+run: ${dataset.metainfo.subject}

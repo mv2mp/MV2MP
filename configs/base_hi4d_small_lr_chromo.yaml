@@ -1,0 +1,14 @@
+hydra:
+    run:
+        dir: "outputs/${exp}/${run}"
+
+defaults:
+  - model: model_w_bg_decrease_lr_earlier
+  - dataset: video_hi4d_chromo
+  - trainer: base
+  - _self_
+
+seed: 42
+project_name: "model_w_bg"
+exp: 'decrease_lr_earlier_chromo_lots_or_rays_hi4d'
+run: ${dataset.metainfo.subject}
