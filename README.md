@@ -78,11 +78,27 @@
 
 
 ### Hi4d  "Yoga" frame 40
-| Setup | DMC  |  MultiNeuralBody | Ours| GT |
+| Cameras | DMC  |  MultiNeuralBody | Ours| GT |
 |------------|--------|--------|--------|--------|
-|7 cams| ![alt](outputs/pair00_yoga00_unlit/40/mesh_list/dmc_7_1.gif) |  ![alt](outputs/pair00_yoga00_unlit/40/mesh_list/real.multinb-val-7_1.gif) | ![alt](outputs/pair00_yoga00_unlit/40/mesh_list/v2a_7_1.gif)|![alt](outputs/pair00_yoga00_unlit/40/mesh_list/gt.gif)|
-|5 cams| ![alt](ablation_outputs/pair00_yoga00_unlit/40/mesh_list/dmc_5_3.gif)| ![alt](ablation_outputs/pair00_yoga00_unlit/40/mesh_list/real.multinb-val-5_3.gif) |![alt](ablation_outputs/pair00_yoga00_unlit/40/mesh_list/v2a_5_3.gif) | ![alt](outputs/pair00_yoga00_unlit/40/mesh_list/gt.gif)|
-|3 cams| ![alt](ablation_outputs/pair00_yoga00_unlit/40/mesh_list/dmc_3_3.gif)| diverged |![alt](ablation_outputs/pair00_yoga00_unlit/40/mesh_list/v2a_3_3.gif) | ![alt](outputs/pair00_yoga00_unlit/40/mesh_list/gt.gif)|
+|7 | ![alt](outputs/pair00_yoga00_unlit/40/mesh_list/dmc_7_1.gif) |         ![alt](outputs/pair00_yoga00_unlit/40/mesh_list/real.multinb-val-7_1.gif) |         ![alt](outputs/pair00_yoga00_unlit/40/mesh_list/v2a_7_1.gif)          |![alt](outputs/pair00_yoga00_unlit/40/mesh_list/gt.gif)|
+|5 | ![alt](ablation_outputs/pair00_yoga00_unlit/40/mesh_list/dmc_5_3.gif)| ![alt](ablation_outputs/pair00_yoga00_unlit/40/mesh_list/real.multinb-val-5_3.gif) |![alt](ablation_outputs/pair00_yoga00_unlit/40/mesh_list/v2a_5_3.gif) | ![alt](outputs/pair00_yoga00_unlit/40/mesh_list/gt.gif)|
+|3 | ![alt](ablation_outputs/pair00_yoga00_unlit/40/mesh_list/dmc_3_3.gif)| diverged |                                                                          ![alt](ablation_outputs/pair00_yoga00_unlit/40/mesh_list/v2a_3_3.gif) | ![alt](outputs/pair00_yoga00_unlit/40/mesh_list/gt.gif)|
+
+
+### Hi4d  "Sidehug" frame 40
+| Cameras | DMC  |  MultiNeuralBody | Ours| GT |
+|------------|--------|--------|--------|--------|
+|7 | ![alt](outputs/pair32_sidehug32_unlit/40/mesh_list/dmc_7_1.gif) |         ![alt](outputs/pair32_sidehug32_unlit/40/mesh_list/real.multinb-val-7_1.gif) |         ![alt](outputs/pair32_sidehug32_unlit/40/mesh_list/v2a_7_1.gif)          |![alt](outputs/pair32_sidehug32_unlit/40/mesh_list/gt.gif)|
+|5 | ![alt](ablation_outputs/pair32_sidehug32_unlit/40/mesh_list/dmc_5_3.gif)| ![alt](ablation_outputs/pair32_sidehug32_unlit/40/mesh_list/real.multinb-val-5_3.gif) |![alt](ablation_outputs/pair32_sidehug32_unlit/40/mesh_list/v2a_5_3.gif) | ![alt](outputs/pair32_sidehug32_unlit/40/mesh_list/gt.gif)|
+|3 | ![alt](ablation_outputs/pair32_sidehug32_unlit/40/mesh_list/dmc_3_3.gif)| diverged |                                                                          ![alt](ablation_outputs/pair32_sidehug32_unlit/40/mesh_list/v2a_3_3.gif) | ![alt](outputs/pair32_sidehug32_unlit/40/mesh_list/gt.gif)|
+
+
+### Hi4d  "Hug" frame 51
+| Cameras | DMC  |  MultiNeuralBody | Ours| GT |
+|------------|--------|--------|--------|--------|
+|7 | ![alt](outputs/pair21_hug21_unlit/51/mesh_list/dmc_7_1.gif) |         ![alt](outputs/pair21_hug21_unlit/51/mesh_list/real.multinb-val-7_1.gif) |         ![alt](outputs/pair21_hug21_unlit/51/mesh_list/v2a_7_1.gif)          |![alt](outputs/pair21_hug21_unlit/51/mesh_list/gt.gif)|
+|5 | ![alt](ablation_outputs/pair21_hug21_unlit/51/mesh_list/dmc_5_3.gif)| ![alt](ablation_outputs/pair21_hug21_unlit/51/mesh_list/real.multinb-val-5_3.gif) |![alt](ablation_outputs/pair21_hug21_unlit/51/mesh_list/v2a_5_3.gif) | ![alt](outputs/pair21_hug21_unlit/51/mesh_list/gt.gif)|
+|3 | ![alt](ablation_outputs/pair21_hug21_unlit/51/mesh_list/dmc_3_3.gif)| diverged |                                                                          ![alt](ablation_outputs/pair21_hug21_unlit/51/mesh_list/v2a_3_3.gif) | ![alt](outputs/pair21_hug21_unlit/51/mesh_list/gt.gif)|
 
 
 
