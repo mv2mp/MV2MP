@@ -89,7 +89,7 @@
 | Cameras | DMC  |  MultiNeuralBody | Ours| GT |
 |------------|--------|--------|--------|--------|
 |7 | ![alt](outputs/pair32_sidehug32_unlit/40/mesh_list/dmc_7_1.gif) |         ![alt](outputs/pair32_sidehug32_unlit/40/mesh_list/real.multinb-val-7_1.gif) |         ![alt](outputs/pair32_sidehug32_unlit/40/mesh_list/v2a_7_1.gif)          |![alt](outputs/pair32_sidehug32_unlit/40/mesh_list/gt.gif)|
-|5 | ![alt](ablation_outputs/pair32_sidehug32_unlit/40/mesh_list/dmc_5_3.gif)| ![alt](ablation_outputs/pair32_sidehug32_unlit/40/mesh_list/real.multinb-val-5_3.gif) |![alt](ablation_outputs/pair32_sidehug32_unlit/40/mesh_list/v2a_5_3.gif) | ![alt](outputs/pair32_sidehug32_unlit/40/mesh_list/gt.gif)|
+|5 | ![alt](ablation_outputs/pair32_sidehug32_unlit/40/mesh_list/dmc_5_3.gif)| ![alt](ablation_outputs/pair32_sidehug32_unlit/40/mesh_list/real.multinb-val-5_3.gif) | ![alt](outputs/pair32_sidehug32_unlit/40/mesh_list/v2a_7_1.gif)  | ![alt](outputs/pair32_sidehug32_unlit/40/mesh_list/gt.gif)|
 |3 | ![alt](ablation_outputs/pair32_sidehug32_unlit/40/mesh_list/dmc_3_3.gif)| diverged |                                                                          ![alt](ablation_outputs/pair32_sidehug32_unlit/40/mesh_list/v2a_3_3.gif) | ![alt](outputs/pair32_sidehug32_unlit/40/mesh_list/gt.gif)|
 
 
