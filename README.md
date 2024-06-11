@@ -100,6 +100,56 @@
 |5 | ![alt](ablation_outputs/pair21_hug21_unlit/51/mesh_list/dmc_5_3.gif)| ![alt](ablation_outputs/pair21_hug21_unlit/51/mesh_list/real.multinb-val-5_3.gif) |![alt](ablation_outputs/pair21_hug21_unlit/51/mesh_list/v2a_5_3.gif) | ![alt](outputs/pair21_hug21_unlit/51/mesh_list/gt.gif)|
 |3 | ![alt](ablation_outputs/pair21_hug21_unlit/51/mesh_list/dmc_3_3.gif)| diverged |                                                                          ![alt](ablation_outputs/pair21_hug21_unlit/51/mesh_list/v2a_3_3.gif) | ![alt](outputs/pair21_hug21_unlit/51/mesh_list/gt.gif)|
 
+## Ablation. Smpl fitting. 
+
+### MESH 
+| scene|frame | smpl fitting mesh| no smpl fitting mesh  | GT|
+|------------|--------|--------|--------|--------|
+|hi4d Yoga|40|![alt](ablation_outputs/pair00_yoga00_unlit/40/mesh_list/v2a_7_1.gif) |![alt](ablation_outputs/pair00_yoga00_unlit/40/mesh_list/v2a_wo_smpl_7_1.gif)| ![alt](outputs/pair00_yoga00_unlit/40/mesh_list/gt.gif)|
+|hi4d Yoga|60|![alt](ablation_outputs/pair00_yoga00_unlit/60/mesh_list/v2a_7_1.gif) |![alt](ablation_outputs/pair00_yoga00_unlit/60/mesh_list/v2a_wo_smpl_7_1.gif)| ![alt](outputs/pair00_yoga00_unlit/60/mesh_list/gt.gif)|
+
+
+
+
+### RENDER 
+| scene|frame | smpl fitting mesh| no smpl fitting mesh  | GT|
+|------------|--------|--------|--------|--------|
+|hi4d Yoga|40|![alt](ablation_outputs/pair00_yoga00_unlit/40/images_undistorted/render_v2a_7_1_16.png)|![alt](ablation_outputs/pair00_yoga00_unlit/40/images_undistorted/render_v2a_wo_smpl_7_1_16.png)|![alt](ablation_outputs/pair00_yoga00_unlit/40/images_undistorted/real_16.png)|
+|hi4d Yoga|60|![alt](ablation_outputs/pair00_yoga00_unlit/60/images_undistorted/render_v2a_7_1_16.png)|![alt](ablation_outputs/pair00_yoga00_unlit/60/images_undistorted/render_v2a_wo_smpl_7_1_16.png)|![alt](ablation_outputs/pair00_yoga00_unlit/60/images_undistorted/real_16.png)|
+
+
+## Ablation. Background. 
+
+### MESH 
+| scene|frame | background| no background  | GT|
+|------------|--------|--------|--------|--------|
+|hi4d Yoga|40|![alt](ablation_outputs/pair00_yoga00_unlit/40/mesh_list/v2a_7_1.gif) |![alt](ablation_outputs/pair00_yoga00_unlit/40/mesh_list/v2a_wo_bg_7_1.gif)| ![alt](outputs/pair00_yoga00_unlit/40/mesh_list/gt.gif)|
+|hi4d Yoga|60|![alt](ablation_outputs/pair00_yoga00_unlit/60/mesh_list/v2a_7_1.gif) |![alt](ablation_outputs/pair00_yoga00_unlit/60/mesh_list/v2a_wo_bg_7_1.gif)| ![alt](outputs/pair00_yoga00_unlit/60/mesh_list/gt.gif)|
+
+
+### RENDER 
+| scene|frame | background| no background  | GT|
+|------------|--------|--------|--------|--------|
+|hi4d Yoga|40|![alt](ablation_outputs/pair00_yoga00_unlit/40/images_undistorted/render_v2a_7_1_16.png)|![alt](ablation_outputs/pair00_yoga00_unlit/40/images_undistorted/render_v2a_wo_bg_7_1_16.png)|![alt](ablation_outputs/pair00_yoga00_unlit/40/images_undistorted/real_16.png)|
+|hi4d Yoga|60|![alt](ablation_outputs/pair00_yoga00_unlit/60/images_undistorted/render_v2a_7_1_16.png)|![alt](ablation_outputs/pair00_yoga00_unlit/60/images_undistorted/render_v2a_wo_bg_7_1_16.png)|![alt](ablation_outputs/pair00_yoga00_unlit/60/images_undistorted/real_16.png)|
+
+## Ablation. New compositional rendering. 
+
+### MESH 
+| scene|frame | new comp rend| no new comp rend  | GT|
+|------------|--------|--------|--------|--------|
+|hi4d Yoga|40|![alt](ablation_outputs/pair00_yoga00_unlit/40/mesh_list/v2a_7_1.gif) |![alt](ablation_outputs/pair00_yoga00_unlit/40/mesh_list/v2a_wo_comp_7_1.gif)| ![alt](outputs/pair00_yoga00_unlit/40/mesh_list/gt.gif)|
+|hi4d Yoga|60|![alt](ablation_outputs/pair00_yoga00_unlit/60/mesh_list/v2a_7_1.gif) |![alt](ablation_outputs/pair00_yoga00_unlit/60/mesh_list/v2a_wo_comp_7_1.gif)| ![alt](outputs/pair00_yoga00_unlit/60/mesh_list/gt.gif)|
+
+
+### RENDER 
+| scene|frame |new comp rend| no new comp rend  | GT|
+|------------|--------|--------|--------|--------|
+|hi4d Hug|51| ![alt](ablation_outputs/pair21_hug21_unlit/51/images_undistorted/render_v2a_7_1_4.png)| ![alt](ablation_outputs/pair21_hug21_unlit/51/images_undistorted/render_v2a_wo_comp_7_1_4.png)| ![alt](ablation_outputs/pair21_hug21_unlit/51/images_undistorted/real_4.png)
+|hi4d Yoga|40|![alt](ablation_outputs/pair00_yoga00_unlit/40/images_undistorted/render_v2a_7_1_16.png)|![alt](ablation_outputs/pair00_yoga00_unlit/40/images_undistorted/render_v2a_wo_comp_7_1_16.png)|![alt](ablation_outputs/pair00_yoga00_unlit/40/images_undistorted/real_16.png)|
+|hi4d Yoga|60|![alt](ablation_outputs/pair00_yoga00_unlit/60/images_undistorted/render_v2a_7_1_16.png)|![alt](ablation_outputs/pair00_yoga00_unlit/60/images_undistorted/render_v2a_wo_comp_7_1_16.png)|![alt](ablation_outputs/pair00_yoga00_unlit/60/images_undistorted/real_16.png)|
+
+
 
 
 
