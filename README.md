@@ -73,4 +73,17 @@
 | 9030 | ![alt](outputs/cmu_panoptic_haggling_a2/9030/images_undistorted/real.multinb-val-8_3_00_08.png) |  ![alt](outputs/cmu_panoptic_haggling_a2/9030/images_undistorted/render_v2a_8_3_00_08.png) | ![alt](outputs/cmu_panoptic_haggling_a2/9030/images_undistorted/gt_00_08.png)|
 | 9090 | ![alt](outputs/cmu_panoptic_haggling_a2/9090/images_undistorted/real.multinb-val-8_3_00_08.png) |  ![alt](outputs/cmu_panoptic_haggling_a2/9090/images_undistorted/render_v2a_8_3_00_08.png) | ![alt](outputs/cmu_panoptic_haggling_a2/9090/images_undistorted/gt_00_08.png)|
 
+## Cameras sparcity investigation. 
+
+
+
+### Hi4d  "Yoga" frame 40
+| Setup | DMC  |  MultiNeuralBody | Ours| GT |
+|------------|--------|--------|--------|--------|
+|7 cams| ![alt](outputs/pair00_yoga00_unlit/40/mesh_list/dmc_7_1.gif) |  ![alt](outputs/pair00_yoga00_unlit/40/mesh_list/real.multinb-val-7_1.gif) | ![alt](outputs/pair00_yoga00_unlit/40/mesh_list/v2a_7_1.gif)|![alt](outputs/pair00_yoga00_unlit/40/mesh_list/gt.gif)|
+|5 cams| ![alt](ablation_outputs/pair00_yoga00_unlit/40/mesh_list/dmc_5_3.gif)| ![alt](ablation_outputs/pair00_yoga00_unlit/40/mesh_list/real.multinb-val-5_3.gif) |![alt](ablation_outputs/pair00_yoga00_unlit/40/mesh_list/v2a_5_3.gif) | ![alt](outputs/pair00_yoga00_unlit/40/mesh_list/gt.gif)|
+|3 cams| ![alt](ablation_outputs/pair00_yoga00_unlit/40/mesh_list/dmc_3_3.gif)| diverged |![alt](ablation_outputs/pair00_yoga00_unlit/40/mesh_list/v2a_3_3.gif) | ![alt](outputs/pair00_yoga00_unlit/40/mesh_list/gt.gif)|
+
+
+
 
