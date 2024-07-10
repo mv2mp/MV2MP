@@ -1,0 +1,4 @@
+__pycache__/
+smpl_models/SMPL_MALE.pkl
+notebooks/
+hydra_outputs/

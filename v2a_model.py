@@ -7,7 +7,7 @@ import attrs
 import cv2
 import jaxtyping as jt
 
-import mvrec_metrics
+import metrics as mvrec_metrics
 import numpy as np
 import pytorch_lightning as pl
 import torch
@@ -16,25 +16,40 @@ import trimesh
 import tqdm
 
 
-from reconstruction.helpers import training_context as context
-from reconstruction.helpers import mesh_visualization
-from reconstruction.neuralbody.utils import accumulate_values_from_coo, tensor_as_image, np2pt, pt2np
-from reconstruction.neuralbody.datasets.utils import create_boundary_on_mask
+import training_context as context
+import mesh_visualization
+from lib.datasets.utils import accumulate_values_from_coo, tensor_as_image, np2pt, pt2np
 
-from reconstruction.vid2avatar.lib.model.v2a import V2A
-from reconstruction.vid2avatar.lib.model.body_model_params import BodyModelParams
-from reconstruction.vid2avatar.lib.model.deformer import SMPLDeformer
-from reconstruction.vid2avatar.lib.model.loss import Loss
 
-from reconstruction.vid2avatar.lib.utils.meshing import generate_mesh
+from lib.model.v2a import V2A
+from lib.model.body_model_params import BodyModelParams
+from lib.model.deformer import SMPLDeformer
+from lib.model.loss import Loss
 
-from reconstruction.vid2avatar.lib.model.deformer import skinning
-from reconstruction.vid2avatar.lib.model.smpl import SMPLServer
-from reconstruction.vid2avatar.lib.utils import utils
+from lib.utils.meshing import generate_mesh
+
+from lib.model.deformer import skinning
+from lib.model.smpl import SMPLServer
+from lib.utils import utils
 
 
 logger = logging.getLogger(__name__)
 
+
+def create_boundary_on_mask(
+    mask: jt.Bool[np.ndarray, "H W"],
+    dilate_kernel_size: int = 5,
+) -> jt.Bool[np.ndarray, "H W"]:
+    if dilate_kernel_size == 0:
+        return np.zeros_like(mask, dtype=bool)
+
+    kernel = np.ones((dilate_kernel_size, dilate_kernel_size), np.uint8)
+    mask_selected = mask.astype(np.uint8)
+
+    mask_erode = cv2.erode(mask_selected.copy(), kernel)
+    mask_dilate = cv2.dilate(mask_selected.copy(), kernel)
+
+    return (mask_dilate - mask_erode) == 1
 
 def squeeze_dict(d):
     keys = d.keys()

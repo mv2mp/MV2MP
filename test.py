@@ -6,11 +6,11 @@ import hydra
 import omegaconf as oc
 import pytorch_lightning as pl
 
-from reconstruction.helpers import training_context as context
+import training_context as context
 
-from reconstruction.vid2avatar.v2a_model import V2AModel
-from reconstruction.vid2avatar.lib.datasets import create_dataset, create_dataloader
-from reconstruction.vid2avatar.lib.utils import log, callbacks, utils
+from v2a_model import V2AModel
+from lib.datasets import create_dataset, create_dataloader
+from lib.utils import log
 
 
 @hydra.main(config_path="configs", config_name="base_hi4d_ff_test")
@@ -52,19 +52,6 @@ def main(opt):
         create_dataloader(create_dataset(opt.dataset.metainfo, config), config) for config in opt.dataset.valid
     ]
     trainer.test(model, test_loaders, ckpt_path=checkpoint)
-
-    ##### mesh extraction test zone
-    # it doesn't work, left here for 'uncomment-and-debug-test-new-functionality'
-    # config_dict = oc.omegaconf.OmegaConf.to_container(opt)
-    # maybe_ff = utils.get_from_dict_recusrive(config_dict, ["dataset", "base_ff_config", "ff_path"], None)
-    # if maybe_ff is not None:
-    #     callbacks.ArtifactsExportToFFCallback(
-    #         maybe_ff,
-    #         test_loaders[0],
-    #         mask_boundary_size=20,  # extract masks as well
-    #     ).call(trainer.model)
-    ##### mesh extraction test zone
-
 
 if __name__ == "__main__":
     main()

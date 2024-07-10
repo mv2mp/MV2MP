@@ -228,7 +228,7 @@ def get_index_outside_of_bbox(samples_uniform, bbox_min, bbox_max):
     return index_outside
 
 
-def weighted_sampling(data, img_size, num_sample, bbox_ratio=0.9, no_rays_mask=None):
+def weighted_sampling(data, img_size, num_sample, no_rays_mask=None):
     """
     More sampling within the bounding box
     """
@@ -236,23 +236,16 @@ def weighted_sampling(data, img_size, num_sample, bbox_ratio=0.9, no_rays_mask=N
     # calculate bounding box
     foreground_mask = data["foreground_mask"]
 
-    where = np.asarray(np.where(foreground_mask))
-    bbox_min = where.min(axis=1)  # yx
-    bbox_max = where.max(axis=1)  # yx
-    # TODO: add some margin here
+    where = np.asarray(np.where(foreground_mask))  # (yx, N)
 
-    num_sample_bbox = int(num_sample * bbox_ratio)
-    samples_bbox = np.random.rand(num_sample_bbox, 2)
-    samples_bbox = samples_bbox * (bbox_max - bbox_min) + bbox_min  # yx
+    where_indexer = np.arange(where.shape[1])
 
-    num_sample_uniform = num_sample - num_sample_bbox
-    samples_uniform = np.random.rand(num_sample_uniform, 2)
-    samples_uniform *= (img_size[0] - 1, img_size[1] - 1)
+    pixels_to_take = np.random.choice(where_indexer, num_sample, replace=True)
+    d2_offsets = np.random.rand(num_sample, 2)
+    taken_pixels = np.clip(where[:, pixels_to_take].T - d2_offsets, a_min=0, a_max=np.array(img_size) - 1)
 
-    # get indices for uniform samples outside of bbox
-    index_outside = get_index_outside_of_bbox(samples_uniform, bbox_min, bbox_max) + num_sample_bbox
-
-    indices = np.concatenate([samples_bbox, samples_uniform], axis=0)
+    index_outside = np.array([], dtype=np.int64)
+    indices = taken_pixels
 
     # indices i, j of samples, but i, j are not integer, they are real.
     # try to do a bilinear interpolation of mask of i j s.

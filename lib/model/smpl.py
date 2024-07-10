@@ -3,8 +3,8 @@ from typing import Optional
 import torch
 import numpy as np
 
-from reconstruction.vid2avatar.lib.smpl import V2A_SMPL_ROOT
-from reconstruction.vid2avatar.lib.smpl.body_models import SMPL
+from lib.smpl import V2A_SMPL_ROOT
+from lib.smpl.body_models import SMPL
 
 
 class SMPLServer(torch.nn.Module):
@@ -30,7 +30,7 @@ class SMPLServer(torch.nn.Module):
         super().__init__()
 
         self.smpl = SMPL(
-            model_path=f"{V2A_SMPL_ROOT}/smpl_model",
+            model_path=f"/home/mv2mp/smpl_models",
             gender=gender,
             batch_size=1,
             use_hands=False,

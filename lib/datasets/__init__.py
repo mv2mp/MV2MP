@@ -1,7 +1,7 @@
 from torch.utils.data import DataLoader, Dataset
 
-from reconstruction.vid2avatar.lib.datasets.ffcache import FFCacheWrapper
-from reconstruction.vid2avatar.lib.datasets.dataset import (
+from .ffcache import FFCacheWrapper
+from .dataset import (
     Dataset,
     ValDataset,
     TestDataset,

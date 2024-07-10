@@ -7,20 +7,23 @@ import hydra
 import hashlib
 import omegaconf as oc
 import pytorch_lightning as pl
+import torch
 
-from reconstruction.helpers import training_context as context
+import training_context as context
 
-from reconstruction.vid2avatar.v2a_model import V2AModel
-from reconstruction.vid2avatar.lib.datasets import create_dataset, create_dataloader
-from reconstruction.vid2avatar.lib.utils import log, callbacks
+from v2a_model import V2AModel
+from lib.datasets import create_dataset, create_dataloader
+from lib.utils import log
 
 
 logger = logging.getLogger(__name__)
 
 
-@hydra.main(config_path="configs", config_name="base_hi4d_test_wo_merge")
+@hydra.main(version_base='1.1', config_path="configs", config_name="train")
 def main(opt):
     pl.seed_everything(42)
+
+    torch.set_float32_matmul_precision("high")
 
     ctx = context.create_context(
         model_name=f"v2a",
@@ -35,18 +38,8 @@ def main(opt):
 
     config_str = yaml.dump(config_dict)
     config_hash = hashlib.md5(config_str.encode()).hexdigest()
-    with open(f"{ctx.state_dir}/config.yaml", "w") as f:
-        f.write(config_str)
 
-    callback_list = [
-        callbacks.NirvanaCheckpointCallback(
-            dirpath=checkpoint_dir,
-            filename="{epoch:04d}-{loss}",
-            save_on_train_epoch_end=True,
-            save_top_k=1,
-            save_last=True,
-        )
-    ]
+    callback_list = []
 
     trainer = pl.Trainer(
         devices=1,

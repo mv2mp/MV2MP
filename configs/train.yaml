@@ -1,0 +1,182 @@
+model:
+  wo_merge: false
+  agg_func: sum
+  learning_rate: 0.0005
+  sched_milestones:
+  - 7
+  - 17
+  sched_factor: 0.5
+  smpl_init: true
+  is_continue: true
+  use_body_parsing: false
+  with_bkgd: true
+  using_inpainting: false
+  use_smpl_deformer: true
+  use_bbox_sampler: false
+  sdf_bounding_sphere_radius: 3
+  model_background: true
+  update_mesh_every_epoch: 3
+  body_model_lr_coeff: 1
+
+  persons_count: 2
+  implicit_network:
+    feature_vector_size: 256
+    d_in: 3
+    d_out: 1
+    dims:
+    - 256
+    - 256
+    - 256
+    - 256
+    - 256
+    - 256
+    - 256
+    - 256
+    init: geometry
+    bias: 0.6
+    skip_in:
+    - 4
+    weight_norm: true
+    embedder_mode: fourier
+    multires: 6
+    cond: smpl
+    scene_bounding_sphere: 4.0
+  rendering_network:
+    feature_vector_size: 256
+    mode: pose
+    d_in: 14
+    d_out: 3
+    dims:
+    - 256
+    - 256
+    - 256
+    - 256
+    weight_norm: true
+    multires_view: -1
+  bg_rendering_network:
+    feature_mlp_size: 64
+    uv_pos_enc_level: 10
+    t_pos_enc_level: 0
+    hidden_dim1: 16
+    hidden_dim2: 256
+    space_scale: 0.2
+    time_scale: 1
+    img_h: 3000
+    img_w: 4000
+    f_size: 8
+
+
+  density:
+    params_init:
+      beta: 0.1
+    beta_min: 0.0001
+  ray_sampler:
+    near: 0.0
+    N_samples: 64
+    N_samples_eval: 128
+    N_samples_extra: 32
+    eps: 0.1
+    beta_iters: 10
+    max_total_iters: 5
+    N_samples_inverse_sphere: 32
+    add_tiny: 1.0e-06
+  loss:
+    eikonal_weight: 0.1
+    bce_weight: 0.005
+    opacity_sparse_weight: 0.003
+    in_shape_weight: 0.01
+    sdf_loss_weight: 0.01
+    filter_rgb_by_segmentation: false # true - /false
+    alpha_mask_source: surface #segmentation|surface
+    dynamic_weight: true
+    milestone: 10
+    opacity_sparse_denom: 0.1
+
+dataset:
+  base_ff_config: &base_ff_config
+    _target: lib.datasets.factory_yt_free.CachedFFGenerator
+    path: /home/mv2mp/data
+    local_smpl_model_path: /home/mv2mp/smpl_models/SMPL_MALE.pkl
+    extrinsics_translation_from_mm_to_m: true
+
+    instance_unpack_configs:
+      foreground:
+        all_instances_mask_threshold: 125
+        is_mask_bitwise: false
+        mask_per_instance_colors: []
+        segmentation_mask_artifact_name: null
+        taken_instances: []
+
+    frames: [11,12,13]
+    generator_caching: false
+    save_locally: false
+  
+    permute_cameras: false
+    permute_frames: none
+    resize_ratio: 0.125
+    object_source: smpl_hi4d
+  metainfo:
+    genders: [male, male]
+    frames_count: ${len:${..base_ff_config.frames}}
+    subject: ${..base_ff_config.ff_path}
+    all_cameras: [4, 16, 28, 40, 52, 64, 76, 88]
+  train:
+    type: FFCache
+    batch_size: 1
+    drop_last: false
+    shuffle: true
+    worker: 0
+    num_sample: 20 #48
+    pixel_per_batch: 20 #48
+    correct_translations: false
+    chosen_frame_ids: ${..base_ff_config.frames}
+    mask_source: dataset
+    zero_non_foreground: false
+    ff_config:
+      <<: *base_ff_config
+      cameras: [4, 16, 28, 40, 52, 64, 76, 88]
+
+  artifact_extraction:
+    type: FFCache
+    batch_size: 1
+    drop_last: false
+    shuffle: true
+    worker: 0
+    num_sample: 20 #48
+    pixel_per_batch: 20 #48
+    correct_translations: false
+    chosen_frame_ids: ${..base_ff_config.frames}
+    mask_source: dataset
+    zero_non_foreground: false
+    resize_ratio: 0.125  # resize in ff preprocessing stage
+    ff_config:
+      <<: *base_ff_config
+      resize_ratio: 1.0  # dont resize internally
+      cameras: [4, 16, 28, 40, 52, 64, 76, 88]
+
+  valid:
+    - type: FFCache
+      batch_size: 1
+      drop_last: false
+      shuffle: false
+      worker: 0
+      num_sample: -1
+      pixel_per_batch: 20 #48
+      correct_translations: true
+      chosen_frame_ids: [12,]
+      zero_non_foreground: false
+      ff_config:
+        <<: *base_ff_config
+        resize_ratio: 0.125
+        cameras: [4, 28, 64, 88]
+
+seed: 42
+project_name: model_w_bg
+exp: looks-like-it-works-5
+run: ${dataset.metainfo.subject}
+
+trainer:
+  max_epochs: 2
+  check_val_every_n_epoch: 1
+  log_every_n_steps: 1
+

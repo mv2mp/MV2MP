@@ -1,6 +1,6 @@
 import abc
 import torch
-from reconstruction.vid2avatar.lib.utils import utils
+from lib.utils import utils
 
 
 class RaySampler(metaclass=abc.ABCMeta):

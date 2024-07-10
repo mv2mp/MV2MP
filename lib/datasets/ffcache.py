@@ -1,19 +1,20 @@
 import copy
 import logging
-from typing import List, Dict, Any
+from typing import List, Literal, Dict, Any
 
 import jaxtyping as jt
 import numpy as np
 import omegaconf as oc
 import torch
 
-from reconstruction.helpers import training_registry as registry
+import training_registry as registry #TODO
 
-from reconstruction.neuralbody.datasets import factory
-from reconstruction.neuralbody.utils import pt2np, np2pt
+from . import factory_yt_free as factory
+from .utils import pt2np, np2pt
+from .utils import get_world_ray_pixel_mask
 
-from reconstruction.vid2avatar.lib.utils import utils
-from reconstruction.vid2avatar.lib.datasets import utils as dataset_utils
+from ..utils import utils
+from . import utils as dataset_utils
 
 
 logger = logging.getLogger(__name__)
@@ -39,7 +40,7 @@ class FFCacheWrapper(torch.utils.data.Dataset):
         if self.BGD_UNPACK_KEY in ff_config.instance_unpack_configs:
             logger.info("separate backgorund masks used")
 
-        self._ff_path = ff_config.ff_path
+        self._ff_path = ff_config.path
         self._ff_config = ff_config
         self._zero_non_foreground = split.zero_non_foreground
 
@@ -49,6 +50,14 @@ class FFCacheWrapper(torch.utils.data.Dataset):
             self._resize_ratio = split.resize_ratio
         else:
             self._resize_ratio = 1.0
+
+        self._mask_source: Literal["dataset", "dataset_dilate", "aabb_vertices"] = "dataset"
+        if hasattr(split, "mask_source"):
+            self._mask_source = split.mask_source
+            if self._mask_source == "aabb_vertices":
+                assert (
+                    not self._zero_non_foreground
+                ), "masking out non-foreground is not supported with aabb_vertices based mask"
 
         self._ff_cache = factory.CachedFFGenerator(ff_config)
         self._frames_count = len(self._ff_cache.dataset.available_frames)
@@ -67,13 +76,13 @@ class FFCacheWrapper(torch.utils.data.Dataset):
 
         self._chosen_frame_ids: List[int] = split.chosen_frame_ids
 
-        assert all(frame_id in self._ff_cache.dataset.available_frames for frame_id in self._chosen_frame_ids)
+        assert all(frame_id in self._ff_cache.dataset.available_frames for frame_id in self._chosen_frame_ids), (self._ff_cache.dataset.available_frames, self._chosen_frame_ids)
 
-        self._keys = [
+        self._keys = sorted(
             (frame_id, cam)
             for frame_id, cam in self._ff_cache.dataset.available_frame_camera_pairs
             if cam in ff_config.cameras and frame_id in self._chosen_frame_ids
-        ]
+        )
 
     def __len__(self):
         return len(self._keys)
@@ -105,7 +114,7 @@ class FFCacheWrapper(torch.utils.data.Dataset):
 
             if self._correct_translations:
                 from scipy.spatial.transform import Rotation
-                from reconstruction.vid2avatar.lib.model.smpl import SMPLServer
+                from lib.model.smpl import SMPLServer
 
                 smpl_scale = torch.ones((1, 1))
                 w2l_rotvec = Rotation.from_matrix(w2l[:3, :3])
@@ -183,16 +192,43 @@ class FFCacheWrapper(torch.utils.data.Dataset):
         original_img_size = original_data_item.image.shape[:2]
 
         data_item = original_data_item.resize(self._resize_ratio)
-        foreground_mask = data_item.all_instances_mask
+
+        if self._mask_source == "dataset":
+            fuzzy_foreground_mask = data_item.all_instances_mask
+        elif self._mask_source == "dataset_dilate":
+            import cv2
+
+            kernel_size = int(0.05 * data_item.image.shape[0])
+
+            kernel = np.ones((kernel_size, kernel_size), np.uint8)
+            mask_selected = 255 * data_item.all_instances_mask.astype(np.uint8)
+            mask_dilate = cv2.dilate(mask_selected.copy(), kernel)
+            fuzzy_foreground_mask = mask_dilate > 0
+
+        elif self._mask_source == "aabb_vertices":
+            with torch.no_grad():
+                fuzzy_foreground_mask = np.zeros_like(data_item.all_instances_mask)
+                for instance_id in range(data_item.n_instances):
+                    fuzzy_foreground_mask += pt2np(
+                        get_world_ray_pixel_mask(
+                            np2pt(data_item.get_vertices(instance_id)),
+                            np2pt(data_item.intrinsics),
+                            np2pt(data_item.extrinsics),
+                            aabb_margin=0.05,
+                            mask_shape=data_item.image.shape[:2],
+                        )
+                    )
+        else:
+            raise NotImplementedError
 
         if self.BGD_UNPACK_KEY in data_items:
             background_mask = data_items[self.BGD_UNPACK_KEY].all_instances_mask
         else:
-            background_mask = np.logical_not(foreground_mask)
+            background_mask = np.logical_not(fuzzy_foreground_mask)
 
         img = data_item.image / 255.0
         if self._zero_non_foreground:
-            img[~foreground_mask] = 0
+            img[~fuzzy_foreground_mask] = 0
         # for eroded masks that means that we spoil good signal here,
         # so no rgb loss should be applied in non fg-region
 
@@ -228,12 +264,14 @@ class FFCacheWrapper(torch.utils.data.Dataset):
             data = {
                 "rgb": img,
                 "uv": uv,
-                "foreground_mask": foreground_mask,
+                "foreground_mask": fuzzy_foreground_mask,
                 "background_mask": background_mask,
             }
 
             samples, index_outside, sample_fg_mask, sample_bg_mask = utils.weighted_sampling(
-                data, img_size, self._num_sample, bbox_ratio=1
+                data,
+                img_size,
+                self._num_sample,
             )
 
             inputs = {
@@ -262,7 +300,7 @@ class FFCacheWrapper(torch.utils.data.Dataset):
             }
             return inputs, images
         else:
-            ys, xs = np.where(foreground_mask)
+            ys, xs = np.where(fuzzy_foreground_mask)
             whwh = np.array([w, h, w, h])
             margin = 15
             box = np.array([xs.min() - margin, ys.min() - margin, xs.max() + margin, ys.max() + margin]).clip(
@@ -288,7 +326,7 @@ class FFCacheWrapper(torch.utils.data.Dataset):
 
             images = {
                 "rgb": img[box_mask].reshape(-1, 3).astype(np.float32),
-                "sample_fg_mask": foreground_mask[box_mask].flatten().astype(bool),
+                "sample_fg_mask": fuzzy_foreground_mask[box_mask].flatten().astype(bool),
                 "sample_bg_mask": background_mask[box_mask].flatten().astype(bool),
                 "img_size": img_size,
                 "original_img_size": original_img_size,

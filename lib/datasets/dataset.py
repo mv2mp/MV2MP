@@ -9,8 +9,8 @@ import torch
 import pickle
 from typing import Dict, List, Any, Literal
 
-from reconstruction.vid2avatar.lib.utils import utils
-from reconstruction.vid2avatar.lib.datasets import utils as dataset_utils
+from ..utils import utils
+from . import utils as dataset_utils
 
 
 def get_cams(scene_path: str) -> Dict[Literal["K", "D", "R", "T"], List[np.ndarray]]:

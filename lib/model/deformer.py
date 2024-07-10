@@ -6,7 +6,7 @@ import torch
 import torch.nn.functional as F
 from pytorch3d import ops
 
-from reconstruction.vid2avatar.lib.model.smpl import SMPLServer
+from lib.model.smpl import SMPLServer
 
 
 class SMPLDeformer(torch.nn.Module):

@@ -4,7 +4,7 @@ import jaxtyping as jt
 import torch.nn as nn
 import torch
 import numpy as np
-from reconstruction.vid2avatar.lib.model.embedders import get_embedder
+from lib.model.embedders import get_embedder
 import torch.nn.functional as F
 
 ConditioningType = Dict[Literal["smpl", "frame"], torch.Tensor]

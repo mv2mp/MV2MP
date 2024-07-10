@@ -1,0 +1,19 @@
+--find-links https://nvidia-kaolin.s3.us-east-2.amazonaws.com/torch-2.0.0_cu117.html
+
+opencv-python-headless==4.5.2.54
+attrs==23.1.0
+jaxtyping==0.2.19
+pytorch-lightning==1.5.10
+lightning-utilities==0.10.1
+trimesh==3.9.20
+omegaconf==2.3.0
+hydra-core==1.2
+pyyaml==6.0
+scikit-image==0.21.0
+numpy==1.23.5
+zstd==1.5.1.0
+tqdm==4.61.1
+nerfacc==0.5.3
+kaolin==0.15.0
+cython==0.29.23
+chumpy==0.70

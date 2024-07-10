@@ -50,11 +50,17 @@ class Loss(nn.Module):
 
     # Global opacity sparseness regularization
     def get_opacity_sparse_loss(self, acc_map, index_off_surface):
+        if index_off_surface.sum() == 0:
+            return torch.tensor(0.0, device=acc_map.device)
+
         opacity_sparse_loss = self.l1_loss(acc_map[index_off_surface], torch.zeros_like(acc_map[index_off_surface]))
         return opacity_sparse_loss
 
     # Optional: This loss helps to stablize the training in the very beginning
     def get_in_shape_loss(self, acc_map, index_in_surface):
+        if index_in_surface.sum() == 0:
+            return torch.tensor(0.0, device=acc_map.device)
+
         in_shape_loss = self.l1_loss(acc_map[index_in_surface], torch.ones_like(acc_map[index_in_surface]))
         return in_shape_loss
 

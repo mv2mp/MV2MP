@@ -11,14 +11,14 @@ import kaolin
 
 from nerfacc import pack
 
-from reconstruction.vid2avatar.lib.model.networks import ImplicitNet, RenderingNet, ConditioningType, KPlanes
-from reconstruction.vid2avatar.lib.model.density import LaplaceDensity, AbsDensity
-from reconstruction.vid2avatar.lib.model.ray_sampler import ErrorBoundSampler
-from reconstruction.vid2avatar.lib.model.deformer import SMPLDeformer
-from reconstruction.vid2avatar.lib.model.smpl import SMPLServer
-from reconstruction.vid2avatar.lib.model.sampler import PointInSpace
+from lib.model.networks import ImplicitNet, RenderingNet, ConditioningType, KPlanes
+from lib.model.density import LaplaceDensity, AbsDensity
+from lib.model.ray_sampler import ErrorBoundSampler
+from lib.model.deformer import SMPLDeformer
+from lib.model.smpl import SMPLServer
+from lib.model.sampler import PointInSpace
 
-from reconstruction.vid2avatar.lib.utils import utils
+from lib.utils import utils
 
 
 def merge_and_sort_points(
@@ -98,6 +98,7 @@ class V2A(nn.Module):
         betas: List[jt.Float[torch.Tensor, "1 10"]],
         genders: List[Literal["male", "female", "neutral"]],
     ):
+        print(len(betas))
         super().__init__()
 
         self.frames = frames

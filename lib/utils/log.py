@@ -11,7 +11,7 @@ import torch
 import torch.utils.tensorboard.writer as tb
 import torch.utils.tensorboard.summary as tbs
 
-from reconstruction.helpers import training_context as context
+import training_context as context
 
 from pytorch_lightning.core.saving import save_hparams_to_yaml
 from pytorch_lightning.utilities import _OMEGACONF_AVAILABLE
@@ -97,6 +97,7 @@ class PulsarTensorboardLogger(pl_loggers_base.LightningLoggerBase):
     @context.rank_zero_only
     def save(self):
         super().save()
+        print(os.path.abspath(self.save_dir))
         hparams_file = os.path.join(self.save_dir, self.NAME_HPARAMS_FILE)
         save_hparams_to_yaml(hparams_file, self.hparams)
 

@@ -41,6 +41,7 @@ def main(opt):
 
     artifact_extraction_loader_config = opt.dataset.artifact_extraction
     assert "ff_config" in artifact_extraction_loader_config, "ff_config is required for artifact_extraction"
+    assert not artifact_extraction_loader_config.shuffle, "shuffled dataloader is not supported"
     ff_config = artifact_extraction_loader_config.ff_config
     ff_path = ff_config.ff_path
 

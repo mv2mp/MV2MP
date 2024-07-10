@@ -1,0 +1,11 @@
+--- /usr/local/lib/python3.8/dist-packages/pytorch_lightning/trainer/optimizers.py	2024-02-07 13:31:24.749534797 +0300
++++ /usr/local/lib/python3.8/dist-packages/pytorch_lightning/trainer/optimizers.py	2024-02-07 13:30:18.671490557 +0300
+@@ -186,7 +186,7 @@
+                     lr_schedulers.append(
+                         {**default_config, "scheduler": scheduler, "reduce_on_plateau": True, "monitor": monitor}
+                     )
+-                elif isinstance(scheduler, optim.lr_scheduler._LRScheduler):
++                elif isinstance(scheduler, (optim.lr_scheduler.LRScheduler, optim.lr_scheduler._LRScheduler)):
+                     lr_schedulers.append({**default_config, "scheduler": scheduler})
+                 else:
+                     raise ValueError(f'The provided lr scheduler "{scheduler}" is invalid')
