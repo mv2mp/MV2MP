@@ -1,5 +1,29 @@
 # MV2MP: Segmentation Free Performance Capture of Humans in Direct Physical Contact from Sparse Multi-Cam Setups
 
+## Instructions for Launching
+
+1. Place one of the models in the smpl_models folder: SMPL_MALE.pkl, SMPL_FEMALE.pkl, or SMPL_NEUTRAL.pkl. (the choice depends on the gender settings in the YAML configuration)
+2. Set the path to the data folder:
+   
+```
+   export HI4D_DIR=/path/hi4d/pair21/hug21/ 
+```
+3. Run the following command:
+```
+bash run_docker.sh  
+```
+
+The data folder should have the following structure:
+   - cameras  
+   - frames  
+   - frames_vis  
+   - images  
+   - meta.npz  
+   - seg  
+   - smpl
+
+The model results will be stored in hydra_outputs
+
 
 ## Resulting meshes comparison
 
